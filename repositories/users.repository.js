@@ -85,6 +85,20 @@ const findWalletByUserId = async (userId) => {
   }
 };
 
+const findWalletByWalletId = async (userId) => {
+  try {
+    const query = `
+      SELECT id, user_id, account_number, balance, created_at, updated_at
+      FROM wallets
+      WHERE id = $1;
+    `;
+    const result = await pool.query(query, [userId]);
+    return result.rows[0];
+  } catch (error) {
+    throw new Error("Failed to fetch wallet by user ID.");
+  }
+};
+
 const findWalletById = async (walletId) => {
   try {
     const query = `
@@ -105,5 +119,6 @@ module.exports = {
   findUserByEmail,
   findUserById,
   findWalletById,
+  findWalletByWalletId,
   findWalletByUserId,
 };
