@@ -29,8 +29,9 @@ const transfer = async (userId, recipientWalletId, amount, description) => {
   return transaction;
 };
 
-const topUp = async (userId, amount, description) => {
-  const wallet = await userRepository.findWalletByUserId(userId);
+const topUp = async (walletId, amount, description) => {
+  const wallet = await userRepository.findWalletByWalletId(walletId);
+  
   if (!wallet) {
     throw new NotFoundError("Wallet not found for the user");
   }
@@ -44,4 +45,11 @@ const topUp = async (userId, amount, description) => {
   return transaction;
 };
 
-module.exports = { transfer, topUp };
+const getAllTransactions = async (walletId) => {
+  const transactions = await transactionRepository.findAllTransactionsByWalletId(
+    walletId
+  );
+  return transactions;
+};
+
+module.exports = { transfer, topUp, getAllTransactions };
